@@ -170,6 +170,9 @@ class TwowentyPageScreenState extends State<TwowentyPageScreen>{
                           points.clear();
                         });
                       }),
+                      IconButton(icon: Icon(Icons.check_box,color: selectedColor,), onPressed: (){
+                        selectColor();
+                      }),
                     ],
                   ),
                 )

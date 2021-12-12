@@ -170,6 +170,9 @@ class NinethPageScreenState extends State<NinethPageScreen>{
                           points.clear();
                         });
                       }),
+                      IconButton(icon: Icon(Icons.check_box,color: selectedColor,), onPressed: (){
+                        selectColor();
+                      }),
                     ],
                   ),
                 )

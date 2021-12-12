@@ -170,6 +170,9 @@ class ThirtyPageScreenState extends State<ThirtyPageScreen>{
                           points.clear();
                         });
                       }),
+                      IconButton(icon: Icon(Icons.check_box,color: selectedColor,), onPressed: (){
+                        selectColor();
+                      }),
                     ],
                   ),
                 )

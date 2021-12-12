@@ -167,6 +167,9 @@ class FifthteenPageScreenState extends State<FifthteenPageScreen>{
                           points.clear();
                         });
                       }),
+                      IconButton(icon: Icon(Icons.check_box,color: selectedColor,), onPressed: (){
+                        selectColor();
+                      }),
                     ],
                   ),
                 )

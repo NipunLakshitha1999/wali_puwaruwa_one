@@ -170,6 +170,9 @@ class TenthPageScreenState extends State<TenthPageScreen>{
                           points.clear();
                         });
                       }),
+                      IconButton(icon: Icon(Icons.check_box,color: selectedColor,), onPressed: (){
+                        selectColor();
+                      }),
                     ],
                   ),
                 )
