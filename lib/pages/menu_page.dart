@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:wali_puwaruwa_one/pages/letter_pages/1_st_page.dart';
 import 'package:wali_puwaruwa_one/pages/letter_pages/2_nd_page.dart';
 import 'package:wali_puwaruwa_one/pages/page_list.dart';
+import 'package:wali_puwaruwa_one/pages/shapes_pages/draw_shapes.dart';
 
 class MenuScreen extends StatefulWidget {
   MenuScreenState createState() => MenuScreenState();
@@ -36,7 +37,8 @@ class MenuScreenState extends State<MenuScreen> {
                   alignment: Alignment.center,
                   child: ElevatedButton(
                     onPressed: () {
-                      // Respond to button press
+                      Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => DrawingPageScreen()));
                     },
                     child: Text('Shapes'),
                   ),

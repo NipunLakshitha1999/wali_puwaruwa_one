@@ -7,9 +7,9 @@ import 'package:localstorage/localstorage.dart';
 import 'dart:ui' as ui show Image;
 import 'package:http/http.dart' as http;
 
-class FirstPageScreen extends StatefulWidget{
+class DrawingPageScreen extends StatefulWidget{
   @override
-  FirstPageScreenState createState() => FirstPageScreenState();
+  DrawingPageScreenState createState() => DrawingPageScreenState();
 }
 
 class DrawingArea{
@@ -19,7 +19,7 @@ class DrawingArea{
   DrawingArea({this.point,this.areaPaint});
 }
 
-class FirstPageScreenState extends State<FirstPageScreen>{
+class DrawingPageScreenState extends State<DrawingPageScreen>{
 
   List<DrawingArea> points =[];
   Color selectedColor;
@@ -36,27 +36,27 @@ class FirstPageScreenState extends State<FirstPageScreen>{
   void selectColor(){
     showDialog(
         context: context,
-      child: AlertDialog(
-        title: const Text('Color Chooser'),
-        content: SingleChildScrollView(
-          child: BlockPicker(
-            pickerColor: selectedColor,
-            onColorChanged: (color){
-              this.setState(() {
-                selectedColor=color;
-              });
-            },
-          ),
-        ),
-        actions: <Widget>[
-          FlatButton(
-              onPressed: (){
-                Navigator.of(context).pop();
+        child: AlertDialog(
+          title: const Text('Color Chooser'),
+          content: SingleChildScrollView(
+            child: BlockPicker(
+              pickerColor: selectedColor,
+              onColorChanged: (color){
+                this.setState(() {
+                  selectedColor=color;
+                });
               },
-              child: Text("Close")
-          )
-        ],
-      )
+            ),
+          ),
+          actions: <Widget>[
+            FlatButton(
+                onPressed: (){
+                  Navigator.of(context).pop();
+                },
+                child: Text("Close")
+            )
+          ],
+        )
     );
   }
 
@@ -85,31 +85,26 @@ class FirstPageScreenState extends State<FirstPageScreen>{
                   width: width,
                   height: height*0.80,
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                    image: DecorationImage(
-                      image: AssetImage("images/1st.png"
-                      ),
-                      fit: BoxFit.cover
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.4),
-                        blurRadius: 5.0,
-                        spreadRadius: 1.0
-                      )
-                    ]
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black.withOpacity(0.4),
+                            blurRadius: 5.0,
+                            spreadRadius: 1.0
+                        )
+                      ]
                   ),
                   child: GestureDetector(
                     onPanDown: (details){
                       this.setState(() {
                         points.add(DrawingArea(
-                          point: details.localPosition,
-                          areaPaint: Paint()
-                            ..strokeCap = StrokeCap.round
-                            ..isAntiAlias = true
-                            ..color = selectedColor
-                            ..strokeWidth = strokeWidth
+                            point: details.localPosition,
+                            areaPaint: Paint()
+                              ..strokeCap = StrokeCap.round
+                              ..isAntiAlias = true
+                              ..color = selectedColor
+                              ..strokeWidth = strokeWidth
                         ));
                       });
                     } ,
@@ -150,7 +145,7 @@ class FirstPageScreenState extends State<FirstPageScreen>{
                   child: Row(
                     children: <Widget>[
                       IconButton(icon: Icon(Icons.color_lens,color: selectedColor,), onPressed: (){
-                       selectColor();
+                        selectColor();
                       }),
                       Expanded(
                           child: Slider(

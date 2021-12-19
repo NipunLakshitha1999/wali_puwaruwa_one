@@ -26,6 +26,8 @@ dependencies:
   painter: any
   flutter_colorpicker: ^0.3.2
   localstorage: any
+  http: any
+
 
 
   # The following adds the Cupertino Icons font to your application.
