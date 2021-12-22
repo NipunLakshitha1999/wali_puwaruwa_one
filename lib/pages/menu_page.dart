@@ -1,7 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:wali_puwaruwa_one/pages/letter_pages/1_st_page.dart';
-import 'package:wali_puwaruwa_one/pages/letter_pages/2_nd_page.dart';
 import 'package:wali_puwaruwa_one/pages/page_list.dart';
 import 'package:wali_puwaruwa_one/pages/shapes_pages/draw_shapes.dart';
 

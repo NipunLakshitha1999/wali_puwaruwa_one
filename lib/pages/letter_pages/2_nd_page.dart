@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ui' as ui;
 import 'dart:ui';
 import 'package:flutter/material.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:painter/painter.dart';
 import 'dart:ui' as ui show Image;
+import 'package:http/http.dart' as http;
 
 class SecondPageScreen extends StatefulWidget{
   SecondPageScreenState createState() => SecondPageScreenState();
@@ -170,8 +172,9 @@ class SecondPageScreenState extends State<SecondPageScreen>{
                           points.clear();
                         });
                       }),
-                      IconButton(icon: Icon(Icons.check_box,color: selectedColor,), onPressed: (){
-                        selectColor();
+                      IconButton(icon: Icon(Icons.check_box,color: selectedColor,), onPressed: () async{
+                        String url="";
+                        var response = await http.post(url,body: json.encode({'status':1}));
                       }),
                     ],
                   ),

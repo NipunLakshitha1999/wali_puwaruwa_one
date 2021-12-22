@@ -174,10 +174,8 @@ class FirstPageScreenState extends State<FirstPageScreen>{
                         });
                       }),
                       IconButton(icon: Icon(Icons.check_box,color: selectedColor,), onPressed: () async{
-                        String url='http://192.168.8.115:800/name';
-                        final response = await http.post(url,body: json.encode({'name':name}));
-                        print(response);
-
+                        String url="";
+                        var response = await http.post(url,body: json.encode({'status':1}));
                       }),
                     ],
                   ),

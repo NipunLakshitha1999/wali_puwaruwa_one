@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:localstorage/localstorage.dart';
 import 'dart:ui' as ui show Image;
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 
 class FifthteenPageScreen extends StatefulWidget{
   FifthteenPageScreenState createState() => FifthteenPageScreenState();
@@ -167,8 +170,9 @@ class FifthteenPageScreenState extends State<FifthteenPageScreen>{
                           points.clear();
                         });
                       }),
-                      IconButton(icon: Icon(Icons.check_box,color: selectedColor,), onPressed: (){
-                        selectColor();
+                      IconButton(icon: Icon(Icons.check_box,color: selectedColor,), onPressed: () async {
+                        String url="";
+                        var response = await http.post(url,body: json.encode({'status':1}));
                       }),
                     ],
                   ),
