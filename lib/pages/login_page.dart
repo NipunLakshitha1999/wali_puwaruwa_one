@@ -1,15 +1,17 @@
 import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:wali_puwaruwa_one/pages/menu_page.dart';
+import 'package:localstorage/localstorage.dart';
 
 class LoginScreen extends StatefulWidget {
   LoginScreenState createState() => LoginScreenState();
 }
 
 class LoginScreenState extends State<LoginScreen> {
+
+  final LocalStorage storage = new LocalStorage('wali_puwaruwa');
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -65,8 +67,10 @@ class LoginScreenState extends State<LoginScreen> {
               child: ElevatedButton.icon(
                 onPressed: () async{
                   String url='http://192.168.8.115:800/name';
+                  String name= emailController.text;
                  var response = await http.post(url,body: json.encode({'email':emailController.text,'password':passwordController.text}));
                   if(response.body == "done"){
+                    storage.setItem("user_name", name);
                    Navigator.push(context, MaterialPageRoute(builder: (context) => MenuScreen()));
                   }
                 },

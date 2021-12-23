@@ -9,6 +9,7 @@ import 'package:localstorage/localstorage.dart';
 import 'package:painter/painter.dart';
 import 'dart:ui' as ui show Image;
 import 'package:http/http.dart' as http;
+import 'package:wali_puwaruwa_one/pages/letter_pages/3_rd_page.dart';
 
 class SecondPageScreen extends StatefulWidget{
   SecondPageScreenState createState() => SecondPageScreenState();
@@ -23,6 +24,7 @@ class DrawingArea{
 
 class SecondPageScreenState extends State<SecondPageScreen>{
 
+  final LocalStorage storage = new LocalStorage('wali_puwaruwa');
   List<DrawingArea> points =[];
   Color selectedColor;
   double strokeWidth;
@@ -173,8 +175,12 @@ class SecondPageScreenState extends State<SecondPageScreen>{
                         });
                       }),
                       IconButton(icon: Icon(Icons.check_box,color: selectedColor,), onPressed: () async{
-                        String url="";
-                        var response = await http.post(url,body: json.encode({'status':1}));
+                        String url='http://192.168.8.115:800/status';
+                        var response = await http.post(url,body: json.encode({'user_name':storage.getItem("user_name"),'status':1}));
+                        print(response);
+                        if(response.body == "done"){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => ThirdPageScreen()));
+                        }
                       }),
                     ],
                   ),
