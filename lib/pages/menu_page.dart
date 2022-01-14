@@ -22,10 +22,11 @@ class MenuScreenState extends State<MenuScreen> {
                   width: width,
                   height: height * 0.5,
                   alignment: Alignment.center,
-
                   child: ElevatedButton(
-                    onPressed: ()=> Navigator.push(context, MaterialPageRoute(
-                        builder: (context) => PageListScreen())),
+                    onPressed: () async {
+                      Navigator.push(context, MaterialPageRoute(
+                          builder: (context) => PageListScreen()));
+                    },
                     child: Text('Letters'),
                   ),
                 ),

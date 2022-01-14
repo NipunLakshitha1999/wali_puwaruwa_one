@@ -107,6 +107,7 @@ class PageListScreenState extends State<PageListScreen> {
   double avgStateLetterThirtyTwo=0;
 
 
+  @override
   void initState(){
     getLetter_01_data();
     getLetter_02_data();
@@ -147,19 +148,19 @@ class PageListScreenState extends State<PageListScreen> {
     int LOneIncorrect=storage.getItem("letter_one_incorrect");
     int LOneClickcount = storage.getItem("letter_one_click_count");
 
-    avgStateLetterOne= (lOneCorrect/LOneClickcount)*100;
-
-    if(avgStateLetterOne>50){
-      letterOneIsTrue = true;
+    if(lOneCorrect != null && LOneClickcount !=null){
+      avgStateLetterOne= (lOneCorrect/LOneClickcount)*100;
+      if(avgStateLetterOne>50){
+        letterOneIsTrue = true;
+      }
     }
+
   }
   void getLetter_02_data(){
     int l2Correct=storage.getItem("letter_two_correct");
     int L2Incorrect=storage.getItem("letter_two_incorrect");
     int L2Clickcount = storage.getItem("letter_two_click_count");
 
-    print(l2Correct);
-    print(L2Clickcount);
     if(l2Correct !=null && L2Clickcount !=null){
       avgStateLetterTwo= (l2Correct/L2Clickcount)*100;
 
