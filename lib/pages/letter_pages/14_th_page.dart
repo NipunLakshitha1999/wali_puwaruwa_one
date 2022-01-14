@@ -8,6 +8,8 @@ import 'dart:ui' as ui show Image;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:wali_puwaruwa_one/pages/letter_pages/15_th_page.dart';
+
 
 class ForteenPageScreen extends StatefulWidget{
   ForteenPageScreenState createState() => ForteenPageScreenState();
@@ -21,6 +23,7 @@ class DrawingArea{
 }
 
 class ForteenPageScreenState extends State<ForteenPageScreen>{
+  final LocalStorage storage = new LocalStorage('wali_puwaruwa');
 
   List<DrawingArea> points =[];
   Color selectedColor;
@@ -66,7 +69,7 @@ class ForteenPageScreenState extends State<ForteenPageScreen>{
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
-    return  Scaffold(
+    return WillPopScope(child: Scaffold(
       body: Stack(
         children: <Widget>[
           Container(
@@ -83,31 +86,31 @@ class ForteenPageScreenState extends State<ForteenPageScreen>{
                   width: width,
                   height: height*0.80,
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                    image: DecorationImage(
-                      image: AssetImage("images/14th.png"
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                      image: DecorationImage(
+                          image: AssetImage("images/14th.png"
+                          ),
+                          fit: BoxFit.cover
                       ),
-                      fit: BoxFit.cover
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.4),
-                        blurRadius: 5.0,
-                        spreadRadius: 1.0
-                      )
-                    ]
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black.withOpacity(0.4),
+                            blurRadius: 5.0,
+                            spreadRadius: 1.0
+                        )
+                      ]
                   ),
                   child: GestureDetector(
                     onPanDown: (details){
                       this.setState(() {
                         points.add(DrawingArea(
-                          point: details.localPosition,
-                          areaPaint: Paint()
-                            ..strokeCap = StrokeCap.round
-                            ..isAntiAlias = true
-                            ..color = selectedColor
-                            ..strokeWidth = strokeWidth
+                            point: details.localPosition,
+                            areaPaint: Paint()
+                              ..strokeCap = StrokeCap.round
+                              ..isAntiAlias = true
+                              ..color = selectedColor
+                              ..strokeWidth = strokeWidth
                         ));
                       });
                     } ,
@@ -148,7 +151,7 @@ class ForteenPageScreenState extends State<ForteenPageScreen>{
                   child: Row(
                     children: <Widget>[
                       IconButton(icon: Icon(Icons.color_lens,color: selectedColor,), onPressed: (){
-                       selectColor();
+                        selectColor();
                       }),
                       Expanded(
                           child: Slider(
@@ -165,15 +168,44 @@ class ForteenPageScreenState extends State<ForteenPageScreen>{
                       ),
                       IconButton(icon: Icon(Icons.layers_clear), onPressed: (){
                         this.setState(() {
-                          final LocalStorage storage = new LocalStorage('murchent_app');
-                          var item = storage.getItem("picture");
-                          print(item);
+                          int clickcount = storage.getItem("letter_14_click_count");
+                          if(clickcount == null){
+                            clickcount=1;
+                          }else{
+                            clickcount=clickcount+1;
+                          }
+                          storage.setItem("letter_14_click_count", clickcount);
+                          int count=storage.getItem("letter_14_incorrect");
+                          if(count == null){
+                            count=1;
+                          }else{
+                            count=count+1;
+                          }
+                          storage.setItem("letter_14_incorrect", count);
                           points.clear();
                         });
                       }),
                       IconButton(icon: Icon(Icons.check_box,color: selectedColor,), onPressed: () async {
-                        String url="";
-                        var response = await http.post(url,body: json.encode({'status':1}));
+                        String url='http://walipuwaruwa03-env.eba-6p8iai3y.us-east-2.elasticbeanstalk.com/status';
+                        var response = await http.Client().post(url,body: json.encode({"user_name":storage.getItem("user_name"),"correct_count":1,"incorrect_count":1,"letter_no":14,"status":1}));
+                        int clickcount = storage.getItem("letter_14_click_count");
+                        if(clickcount == null){
+                          clickcount=1;
+                        }else{
+                          clickcount=clickcount+1;
+                        }
+                        storage.setItem("letter_14_click_count", clickcount);
+                        print(clickcount);
+                        int count=storage.getItem("letter_14_correct");
+                        if(count == null){
+                          count=1;
+                        }else{
+                          count=count+1;
+                        }
+                        storage.setItem("letter_14_correct",count);
+                        if(response.body == "done"){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => FifthteenPageScreen()));
+                        }
                       }),
                     ],
                   ),
@@ -183,7 +215,7 @@ class ForteenPageScreenState extends State<ForteenPageScreen>{
           )
         ],
       ),
-    );
+    ));
   }
 }
 

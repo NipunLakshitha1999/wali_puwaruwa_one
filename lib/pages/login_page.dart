@@ -66,9 +66,10 @@ class LoginScreenState extends State<LoginScreen> {
               margin: EdgeInsets.only(top: 20),
               child: ElevatedButton.icon(
                 onPressed: () async{
-                  String url='http://192.168.8.115:800/name';
+                  String url='http://walipuwaruwa03-env.eba-6p8iai3y.us-east-2.elasticbeanstalk.com/name';
                   String name= emailController.text;
-                 var response = await http.post(url,body: json.encode({'email':emailController.text,'password':passwordController.text}));
+                 var response = await http.Client().post(url,body: json.encode({"email":emailController.text,"password":passwordController.text}));
+                 print(response.body);
                   if(response.body == "done"){
                     storage.setItem("user_name", name);
                    Navigator.push(context, MaterialPageRoute(builder: (context) => MenuScreen()));

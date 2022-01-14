@@ -10,6 +10,8 @@ import 'dart:ui' as ui show Image;
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:wali_puwaruwa_one/pages/letter_pages/23_th_page.dart';
+
 
 
 class TwowentyTwoPageScreen extends StatefulWidget{
@@ -24,6 +26,7 @@ class DrawingArea{
 }
 
 class TwowentyTwoPageScreenState extends State<TwowentyTwoPageScreen>{
+  final LocalStorage storage = new LocalStorage('wali_puwaruwa');
 
   List<DrawingArea> points =[];
   Color selectedColor;
@@ -69,7 +72,7 @@ class TwowentyTwoPageScreenState extends State<TwowentyTwoPageScreen>{
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
-    return  Scaffold(
+    return WillPopScope(child:  Scaffold(
       body: Stack(
         children: <Widget>[
           Container(
@@ -86,31 +89,31 @@ class TwowentyTwoPageScreenState extends State<TwowentyTwoPageScreen>{
                   width: width,
                   height: height*0.80,
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                    image: DecorationImage(
-                      image: AssetImage("images/22th.png"
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                      image: DecorationImage(
+                          image: AssetImage("images/22th.png"
+                          ),
+                          fit: BoxFit.cover
                       ),
-                      fit: BoxFit.cover
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.4),
-                        blurRadius: 5.0,
-                        spreadRadius: 1.0
-                      )
-                    ]
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black.withOpacity(0.4),
+                            blurRadius: 5.0,
+                            spreadRadius: 1.0
+                        )
+                      ]
                   ),
                   child: GestureDetector(
                     onPanDown: (details){
                       this.setState(() {
                         points.add(DrawingArea(
-                          point: details.localPosition,
-                          areaPaint: Paint()
-                            ..strokeCap = StrokeCap.round
-                            ..isAntiAlias = true
-                            ..color = selectedColor
-                            ..strokeWidth = strokeWidth
+                            point: details.localPosition,
+                            areaPaint: Paint()
+                              ..strokeCap = StrokeCap.round
+                              ..isAntiAlias = true
+                              ..color = selectedColor
+                              ..strokeWidth = strokeWidth
                         ));
                       });
                     } ,
@@ -151,7 +154,7 @@ class TwowentyTwoPageScreenState extends State<TwowentyTwoPageScreen>{
                   child: Row(
                     children: <Widget>[
                       IconButton(icon: Icon(Icons.color_lens,color: selectedColor,), onPressed: (){
-                       selectColor();
+                        selectColor();
                       }),
                       Expanded(
                           child: Slider(
@@ -168,15 +171,44 @@ class TwowentyTwoPageScreenState extends State<TwowentyTwoPageScreen>{
                       ),
                       IconButton(icon: Icon(Icons.layers_clear), onPressed: (){
                         this.setState(() {
-                          final LocalStorage storage = new LocalStorage('murchent_app');
-                          var item = storage.getItem("picture");
-                          print(item);
+                          int clickcount = storage.getItem("letter_22_click_count");
+                          if(clickcount == null){
+                            clickcount=1;
+                          }else{
+                            clickcount=clickcount+1;
+                          }
+                          storage.setItem("letter_22_click_count", clickcount);
+                          int count=storage.getItem("letter_22_incorrect");
+                          if(count == null){
+                            count=1;
+                          }else{
+                            count=count+1;
+                          }
+                          storage.setItem("letter_22_incorrect", count);
                           points.clear();
                         });
                       }),
                       IconButton(icon: Icon(Icons.check_box,color: selectedColor,), onPressed: () async {
-                        String url="";
-                        var response = await http.post(url,body: json.encode({'status':1}));
+                        String url='http://walipuwaruwa03-env.eba-6p8iai3y.us-east-2.elasticbeanstalk.com/status';
+                        var response = await http.Client().post(url,body: json.encode({"user_name":storage.getItem("user_name"),"correct_count":1,"incorrect_count":1,"letter_no":22,"status":1}));
+                        int clickcount = storage.getItem("letter_22_click_count");
+                        if(clickcount == null){
+                          clickcount=1;
+                        }else{
+                          clickcount=clickcount+1;
+                        }
+                        storage.setItem("letter_22_click_count", clickcount);
+                        print(clickcount);
+                        int count=storage.getItem("letter_22_correct");
+                        if(count == null){
+                          count=1;
+                        }else{
+                          count=count+1;
+                        }
+                        storage.setItem("letter_22_correct",count);
+                        if(response.body == "done"){
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => TwowentyThirdPageScreen()));
+                        }
                       }),
                     ],
                   ),
@@ -186,7 +218,7 @@ class TwowentyTwoPageScreenState extends State<TwowentyTwoPageScreen>{
           )
         ],
       ),
-    );
+    ));
   }
 }
 

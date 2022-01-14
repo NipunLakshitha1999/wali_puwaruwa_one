@@ -22,6 +22,7 @@ class DrawingArea{
 }
 
 class ThirtyTwoPageScreenState extends State<ThirtyTwoPageScreen>{
+  final LocalStorage storage = new LocalStorage('wali_puwaruwa');
 
   List<DrawingArea> points =[];
   Color selectedColor;
@@ -67,7 +68,7 @@ class ThirtyTwoPageScreenState extends State<ThirtyTwoPageScreen>{
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
-    return  Scaffold(
+    return WillPopScope(child: Scaffold(
       body: Stack(
         children: <Widget>[
           Container(
@@ -84,31 +85,31 @@ class ThirtyTwoPageScreenState extends State<ThirtyTwoPageScreen>{
                   width: width,
                   height: height*0.80,
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(20.0)),
-                    image: DecorationImage(
-                      image: AssetImage("images/32th.png"
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(20.0)),
+                      image: DecorationImage(
+                          image: AssetImage("images/32th.png"
+                          ),
+                          fit: BoxFit.cover
                       ),
-                      fit: BoxFit.cover
-                    ),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.4),
-                        blurRadius: 5.0,
-                        spreadRadius: 1.0
-                      )
-                    ]
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black.withOpacity(0.4),
+                            blurRadius: 5.0,
+                            spreadRadius: 1.0
+                        )
+                      ]
                   ),
                   child: GestureDetector(
                     onPanDown: (details){
                       this.setState(() {
                         points.add(DrawingArea(
-                          point: details.localPosition,
-                          areaPaint: Paint()
-                            ..strokeCap = StrokeCap.round
-                            ..isAntiAlias = true
-                            ..color = selectedColor
-                            ..strokeWidth = strokeWidth
+                            point: details.localPosition,
+                            areaPaint: Paint()
+                              ..strokeCap = StrokeCap.round
+                              ..isAntiAlias = true
+                              ..color = selectedColor
+                              ..strokeWidth = strokeWidth
                         ));
                       });
                     } ,
@@ -149,7 +150,7 @@ class ThirtyTwoPageScreenState extends State<ThirtyTwoPageScreen>{
                   child: Row(
                     children: <Widget>[
                       IconButton(icon: Icon(Icons.color_lens,color: selectedColor,), onPressed: (){
-                       selectColor();
+                        selectColor();
                       }),
                       Expanded(
                           child: Slider(
@@ -166,15 +167,39 @@ class ThirtyTwoPageScreenState extends State<ThirtyTwoPageScreen>{
                       ),
                       IconButton(icon: Icon(Icons.layers_clear), onPressed: (){
                         this.setState(() {
-                          final LocalStorage storage = new LocalStorage('murchent_app');
-                          var item = storage.getItem("picture");
-                          print(item);
+                          int clickcount = storage.getItem("letter_32_click_count");
+                          if(clickcount == null){
+                            clickcount=1;
+                          }else{
+                            clickcount=clickcount+1;
+                          }
+                          storage.setItem("letter_32_click_count", clickcount);
+                          int count=storage.getItem("letter_32_incorrect");
+                          if(count == null){
+                            count=1;
+                          }else{
+                            count=count+1;
+                          }
+                          storage.setItem("letter_32_incorrect", count);
                           points.clear();
                         });
                       }),
                       IconButton(icon: Icon(Icons.check_box,color: selectedColor,), onPressed: () async {
-                        String url="";
-                        var response = await http.post(url,body: json.encode({'status':1}));
+                        int clickcount = storage.getItem("letter_32_click_count");
+                        if(clickcount == null){
+                          clickcount=1;
+                        }else{
+                          clickcount=clickcount+1;
+                        }
+                        storage.setItem("letter_32_click_count", clickcount);
+                        print(clickcount);
+                        int count=storage.getItem("letter_32_correct");
+                        if(count == null){
+                          count=1;
+                        }else{
+                          count=count+1;
+                        }
+                        storage.setItem("letter_32_correct",count);
                       }),
                     ],
                   ),
@@ -184,7 +209,7 @@ class ThirtyTwoPageScreenState extends State<ThirtyTwoPageScreen>{
           )
         ],
       ),
-    );
+    ));
   }
 }
 
